@@ -1,49 +1,57 @@
-import './styles.css';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
 
+export default function HelloWorldApp() {
+  const [emoji, setEmoji] = useState("");
+  const [message, setMessage] = useState("");
 
-export default class HelloWorldApp extends React.Component {
-    constructor(props) {
-        super(props);
+  useEffect(() => {
+    // Show application buttons in settings and order windows
+    Poster.interface.showApplicationIconAt({
+      functions: "Кнопка платформы",
+      order: "Кнопка платформы",
+      payment: "My Button",
+    });
 
-        this.state = {
-            emoji: '',
-            message: '',
-        };
+    // Subscribe to button click
+    const handleIconClick = (data) => {
+      if (data.place === "order") {
+        setEmoji("👩‍🍳");
+        setMessage("Вы открыли окно заказа!");
+      } else {
+        setEmoji("💵");
+        setMessage("Checkout modal!");
+      }
+      // Show interface
+      Poster.interface.popup({ width: 500, height: 400, title: "My app" });
+    };
 
-        // Показываем кнопки приложения в окне настроек и заказа
-        Poster.interface.showApplicationIconAt({
-            functions: 'Кнопка платформы',
-            order: 'Кнопка платформы',
-            payment: 'My Button',
-        });
+    // Subscribe to order close event
+    const handleOrderClose = () => {
+      setEmoji("🍾");
+      setMessage("Hello world!");
+      // Show interface
+      Poster.interface.popup({
+        width: 500,
+        height: 400,
+        title: "Мое приложение",
+      });
+    };
 
-        // Подписываемся на клик по кнопке
-        Poster.on('applicationIconClicked', (data) => {
-            if (data.place === 'order') {
-                this.setState({ emoji: '👩‍🍳', message: 'Вы открыли окно заказа!' });
-            } else {
-                this.setState({ emoji: '💵', message: 'Checkout modal!' });
-            }
-            // Показываем интерфейс
-            Poster.interface.popup({ width: 500, height: 400, title: 'My app' });
-        });
+    Poster.on("applicationIconClicked", handleIconClick);
+    Poster.on("afterOrderClose", handleOrderClose);
 
-        // Подписываемся на ивент закрытия заказа
-        Poster.on('afterOrderClose', () => {
-            this.setState({ emoji: '🍾', message: 'Вы только что закрыли заказ, ура!' });
-            // Показываем интерфейс
-            Poster.interface.popup({ width: 500, height: 400, title: 'Мое приложение' });
-        });
-    }
+    // Cleanup function to remove event listeners
+    return () => {
+      Poster.off("applicationIconClicked", handleIconClick);
+      Poster.off("afterOrderClose", handleOrderClose);
+    };
+  }, []); // Empty dependency array means this effect runs once on mount
 
-    render() {
-        const { emoji, message } = this.state;
-
-        return (
-            <div className="hello-world">
-                <h1>{emoji}</h1>
-                <p>{message}</p>
-            </div>
-        );
-    }
+  return (
+    <div className="hello-world">
+      <h1>{emoji}</h1>
+      <p>{message}</p>
+    </div>
+  );
 }
