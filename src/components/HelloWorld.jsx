@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./styles.css";
+import "./HelloWorld.css";
 
 export default function HelloWorldApp() {
   const [emoji, setEmoji] = useState("");
@@ -27,26 +27,31 @@ export default function HelloWorldApp() {
     };
 
     // Subscribe to order close event
-    const handleOrderClose = () => {
+    const handleOrderClose = async () => {
       setEmoji("🍾");
       setMessage("Hello world!");
       // Show interface
       Poster.interface.popup({
         width: 500,
         height: 400,
-        title: "Мое приложение",
+        title: "My app",
       });
     };
 
     Poster.on("applicationIconClicked", handleIconClick);
     Poster.on("afterOrderClose", handleOrderClose);
+    Poster.on("beforeOrderClose", (data, next) => {
+      alert("Order total " + data.order.total);
+
+      next();
+    });
 
     // Cleanup function to remove event listeners
     return () => {
       Poster.off("applicationIconClicked", handleIconClick);
       Poster.off("afterOrderClose", handleOrderClose);
     };
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   return (
     <div className="hello-world">

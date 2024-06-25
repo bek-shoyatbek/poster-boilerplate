@@ -2,11 +2,25 @@ import r from "request";
 import md5 from "md5";
 import fs from "fs";
 import shell from "shelljs";
-import manifest from "./manifest.json" assert { type: "json" };
+import "dotenv/config";
 
 const URL =
   "https://platform.joinposter.com/api/application.uploadPOSPlatformBundle?format=json";
 const FILENAME = "bundle.js";
+
+if (!process.env.APP_ID || !process.env.APP_SECRET) {
+  console.log(
+    "Please set POSTER_APP_ID and POSTER_APP_SECRET environment variables"
+  );
+  process.exit(1);
+}
+
+const appId = process.env.APP_ID;
+const appSecret = process.env.APP_SECRET;
+
+console.log("Preparing bundle...");
+console.log("appId:", appId);
+console.log("appSecret:", appSecret);
 
 (function () {
   console.log("Started bundle build, you will see a message in a minute...");
@@ -19,15 +33,11 @@ const FILENAME = "bundle.js";
   fs.readFile(FILENAME, (err, buf) => {
     if (!err) {
       const fileMd5 = md5(buf),
-        signParts = [
-          manifest.applicationId,
-          fileMd5,
-          manifest.applicationSecret,
-        ],
-        sign = md5(signParts.join(":"));
+        signParts = [appId, fileMd5, appSecret];
+      let sign = md5(signParts.join(":"));
 
       const formData = {
-        application_id: manifest.applicationId,
+        application_id: appId,
         sign,
         bundle: fs.createReadStream(`./${FILENAME}`),
       };
