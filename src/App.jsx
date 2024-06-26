@@ -1,10 +1,10 @@
 import "./css/main.scss";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import HelloWorldApp from "./components/HelloWorld";
+import AddQRCode from "./components/AddQRCode";
 
 function App() {
-  return <HelloWorldApp />;
+  return <AddQRCode />;
 }
 
 const container = document.getElementById("app-container");
