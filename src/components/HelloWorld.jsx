@@ -40,8 +40,14 @@ export default function HelloWorldApp() {
 
     Poster.on("applicationIconClicked", handleIconClick);
     Poster.on("afterOrderClose", handleOrderClose);
-    Poster.on("beforeOrderClose", (data, next) => {
-      alert("Order total " + data.order.total);
+    Poster.on("beforeOrderClose", async (data, next) => {
+      console.log("data", data);
+      var result = await Poster.orders.setPrintText(
+        data.order_id,
+        "Hello guys\nI am a Lorem Ipsum"
+      );
+
+      console.log(result); // { success: true }
 
       next();
     });
