@@ -11,13 +11,12 @@ export default function HelloWorldApp() {
       const qrCode = await generateQRCode(REDIRECT_URL);
       const result = await Poster.orders.setPrintText(data.order.id, qrCode);
 
-      console.log("result", result); // { success: true }
+      console.log("result", result);
 
       next();
     };
     Poster.on("beforeOrderClose", handleBeforeOrderClose);
 
-    // Cleanup function to remove event listeners
     return () => {
       Poster.off("beforeOrderClose", handleBeforeOrderClose);
     };
@@ -28,12 +27,9 @@ export default function HelloWorldApp() {
 
 async function generateQRCode(data) {
   try {
-    // Generate QR code as a string
     const qrString = await QRCode.toString(data, { type: "utf8", small: true });
 
-    // Combine QR code string with additional string
     const result = qrString + "\n\n";
-    console.log("qrcode", result);
     return result;
   } catch (error) {
     console.error("Error generating QR code:", error);
