@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import "./AddQRCode.css";
-import QRCode from "qrcode";
 
-const REDIRECT_URL = "www.example.com";
+const REDIRECT_URL = "https://z73fb93d-5173.euw.devtunnels.ms";
 
 export default function HelloWorldApp() {
   useEffect(() => {
     const handleBeforeOrderClose = async (data, next) => {
-      console.log("data", data);
-      const qrCode = await generateQRCode(REDIRECT_URL);
-      const result = await Poster.orders.setPrintText(data.order.id, qrCode);
+      const result = await Poster.orders.printReceipt(
+        data.order.id,
+        `${REDIRECT_URL}/billing?orderId=${data.order.id}&userId=${data.order.userId}&total=${data.order.total}`,
+        "Onepay"
+      );
 
       console.log("result", result);
 
@@ -23,15 +24,4 @@ export default function HelloWorldApp() {
   }, []);
 
   return <div className="hello-world"></div>;
-}
-
-async function generateQRCode(data) {
-  try {
-    const qrString = await QRCode.toString(data, { type: "utf8", small: true });
-
-    const result = qrString + "\n\n";
-    return result;
-  } catch (error) {
-    console.error("Error generating QR code:", error);
-  }
 }

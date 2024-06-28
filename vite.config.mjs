@@ -8,6 +8,7 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
+
   build: {
     lib: {
       entry: "./src/App.jsx",
