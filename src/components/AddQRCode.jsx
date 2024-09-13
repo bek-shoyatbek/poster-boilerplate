@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import "./AddQRCode.css";
 
-const REDIRECT_URL = "https://z73fb93d-5173.euw.devtunnels.ms";
+const REDIRECT_URL = "https://5j23pkp4-5173.euw.devtunnels.ms";
 
-export default function HelloWorldApp() {
+export function AddQRCode() {
   useEffect(() => {
     const handleBeforeOrderClose = async (data, next) => {
       const spotId = Poster?.settings?.spotId;
-      console.log("set", settings);
 
+      console.log("spotId", spotId);
       const result = await Poster.orders.printReceipt(
         data.order.id,
-        `${REDIRECT_URL}/billing?spotId=${spotId}&orderId=${data.order.id}&userId=${data.order.userId}&total=${data.order.total}`,
+        `${REDIRECT_URL}/pay?spotId=${spotId}&orderId=${data.order.id}&userId=${data.order.userId}&total=${data.order.total}`,
         "Onepay"
       );
 

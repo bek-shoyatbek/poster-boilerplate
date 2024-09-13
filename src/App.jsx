@@ -1,9 +1,10 @@
 import "./css/main.scss";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import AddQRCode from "./components/AddQRCode";
+import { AddQRCode } from "./components/AddQRCode";
 
 function App() {
+  console.log("Bek's application is working!");
   return <AddQRCode />;
 }
 
