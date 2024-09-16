@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import "./AddQRCode.css";
 
-const REDIRECT_URL = "https://5j23pkp4-5173.euw.devtunnels.ms";
+const REDIRECT_URL_LOCAL = "https://5j23pkp4-5173.euw.devtunnels.ms";
+const REDIRECT_URL = "https://payrest.uz";
 
 export function AddQRCode() {
   useEffect(() => {
