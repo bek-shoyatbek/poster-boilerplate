@@ -10,7 +10,7 @@ export function AddQRCode() {
 
       await Poster.orders.printReceipt(
         data.order.id,
-        `${REDIRECT_URL}/pay?spotId=${spotId}&orderId=${data.order.id}&userId=${data.order.userId}&total=${data.order.total}`,
+        `${REDIRECT_URL}/pay?spotId=${spotId}&orderId=${data.order.id}&userId=${data.order.userId}&total=${data.order.total}&terminal=poster`,
         "Onepay"
       );
 
