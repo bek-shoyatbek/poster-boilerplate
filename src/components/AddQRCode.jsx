@@ -7,11 +7,12 @@ export function AddQRCode() {
   useEffect(() => {
     const handleBeforeOrderClose = async (data, next) => {
       const spotId = Poster?.settings?.spotId;
+      console.log('settings: ', Poster?.settings);
 
       await Poster.orders.printReceipt(
         data.order.id,
-        `${REDIRECT_URL}/pay?spotId=${spotId}&orderId=${data.order.id}&userId=${data.order.userId}&total=${data.order.total}&terminal=poster`,
-        "Onepay"
+        `${REDIRECT_URL}/pay?spotId=${spotId}&userId=${data.order.userId}&total=${data.order.total}&terminal=poster&tableId=${data.order.tableId}`,
+        "Payrest"
       );
 
       next();
